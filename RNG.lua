@@ -58,32 +58,32 @@ function next_rng1(value)
 	--r0 = bottom 8 bits of new rng (LDRB at the end)
 	--r2 = top 8 bits of new rng
 	--r3 = bottom 8 bits of old rng
-	local r2 = value								--Line 8; ignores sign extend (it's not important)
-	local r0 = bit.lshift(value, 1)					--Line 9 LSL     r0, r2, #1
-	r0 = value + r2									--Line 10 ADD     r0, r0, r2
-	r2 = bit.rshift(r0,8)							--Line 11, 12; same effect, without using load/stores (takes top 8 bits of RNG * 3)
-	local r3 = bit.band(value, 0xFF)				--Line 13; same effect, without using load/stores (bottom 8 bits of old RNG)
-	r0 = r2 + r3									--Line 14
-	r0 = bit.band(r0, 0xFF)							--Line 15; same effect without using load/stores (specfically the store byte ignores everything > 0xFF)
-	r0 = r0 + bit.rshift(r2, 8)						--Line 16; same effect without using load/stores (r2 shifted to make it > 0xFF so as to be able to treat it as top bits eg. 0xC100)
-	return bit.band(r0, 0xFFFF)						--Line 18; the AND 0xFFFF removes the sign extended crap which isn't stored	
+	local r2 = value				--Line 8; ignores sign extend (it's not important)
+	local r0 = bit.lshift(value, 1)			--Line 9 LSL     r0, r2, #1
+	r0 = value + r2					--Line 10 ADD     r0, r0, r2
+	r2 = bit.rshift(r0,8)				--Line 11, 12; same effect, without using load/stores (takes top 8 bits of RNG * 3)
+	local r3 = bit.band(value, 0xFF)		--Line 13; same effect, without using load/stores (bottom 8 bits of old RNG)
+	r0 = r2 + r3					--Line 14
+	r0 = bit.band(r0, 0xFF)				--Line 15; same effect without using load/stores (specfically the store byte ignores everything > 0xFF)
+	r0 = r0 + bit.rshift(r2, 8)			--Line 16; same effect without using load/stores (r2 shifted to make it > 0xFF so as to be able to treat it as top bits eg. 0xC100)
+	return bit.band(r0, 0xFFFF)			--Line 18; the AND 0xFFFF removes the sign extended crap which isn't stored	
 end
 
 function next_rng2(value)
 	--Simplification of the above
-	local r0 = value								--Lines 8; using r0 instead of r2 because r2 would be changed later anyways
-	r0 = value + bit.lshift(value, 1)				--Lines 9, 10
-	local r2 = math.floor(r0/256)					--Lines 11, 12; same effect as right shift
-	local r3 = value % 256							--Lines 13; same effect as AND 0xFF
-	r0 = ((r2 + r3) % 256) + (r2 * 256)				--Lines 14, 15, 16
-	return r0 % 65536								--Line 18; same effect as AND 0xFFFF
+	local r0 = value				--Lines 8; using r0 instead of r2 because r2 would be changed later anyways
+	r0 = value + bit.lshift(value, 1)		--Lines 9, 10
+	local r2 = math.floor(r0/256)			--Lines 11, 12; same effect as right shift
+	local r3 = value % 256				--Lines 13; same effect as AND 0xFF
+	r0 = ((r2 + r3) % 256) + (r2 * 256)		--Lines 14, 15, 16
+	return r0 % 65536				--Line 18; same effect as AND 0xFFFF
 end
 	
 function next_rng3(value)
 	--Even shorter code
-	local x = math.floor(3*value/256)				--This is bit.rshift(3 * value,8)
-	local r = ((x + value) % 256) + (x * 256)		--bit.band same as mod 256
-	return r % 65536								--Same as mod 65536
+	local x = math.floor(3*value/256)		--This is bit.rshift(3 * value,8)
+	local r = ((x + value) % 256) + (x * 256)	--bit.band same as mod 256
+	return r % 65536				--Same as mod 65536
 end
 
 function next_rng4(value)
