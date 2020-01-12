@@ -1,4 +1,5 @@
 --EWRAM address for the dungeon map. This can either print them out on the lua console, or as a file.
+--These addresses are relevant for the generated map when pressing B, not for the true dungeon layout.
 local start = 0x00FED0
 local start2 = 0x0106D0
 local start3 = 0x011ED0
