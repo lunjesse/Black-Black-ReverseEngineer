@@ -464,7 +464,7 @@ Row	Col		Start	End
 14	48-63	009E90	009EAE
 15	48-63	009EB0	009ECE
 
-0000	walkable?
+0000	walkable
 0001	unwalkable thing? shows up as nothing in map
 0002	/ diagonal border with top part green
 0003	\ diagonal border with top part green
@@ -485,7 +485,7 @@ Row	Col		Start	End
 0012	[ some border
 0013	n some border
 0014	U some border
-0020	Up stairs?
+0020	walkable2
 0030	Chest
 0040	Stairs
 0050	Time Crystal
